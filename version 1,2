@@ -1,0 +1,41 @@
+//////
+const int pinoSensor = A0;  // Fio verde longo
+const int pinoLED = 2;      // Fio amarelo/verde que vai para o resistor
+const int pinoBuzzer = 6;   // Fio laranja
+
+////////
+const int limiteAlerta = 500; 
+
+void setup() {
+  pinMode(pinoLED, OUTPUT);
+  pinMode(pinoBuzzer, OUTPUT);
+  pinMode(pinoSensor, INPUT);
+  
+  Serial.begin(9600);
+  Serial.println("Detector de Gas Ativo!");
+}
+
+void loop() {
+  int valorLido = analogRead(pinoSensor);
+  
+  ////////
+  Serial.print("Nivel lido: ");
+  Serial.println(valorLido);
+
+  if (valorLido > limiteAlerta) {
+    // AÇÃO DE ALERTA
+    digitalWrite(pinoLED, HIGH);     // Liga o LED
+    tone(pinoBuzzer, 1000);          // Liga o som
+    delay(150);                      // Espera um pouco
+    
+    digitalWrite(pinoLED, LOW);      // Pisca o LED
+    noTone(pinoBuzzer);              // Desliga o som
+    delay(150);
+  } else {
+    // TUDO SEGURO
+    digitalWrite(pinoLED, LOW);
+    noTone(pinoBuzzer);
+  }
+
+  delay(50); 
+}
