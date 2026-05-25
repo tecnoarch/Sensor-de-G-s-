@@ -1,41 +1,67 @@
-//////
-const int pinoSensor = A0;  // Fio verde longo
-const int pinoLED = 2;      // Fio amarelo/verde que vai para o resistor
-const int pinoBuzzer = 6;   // Fio laranja
 
-////////
-const int limiteAlerta = 500; 
+// Definição dos pinos :
+const int pinoSensor = A0;      // Fio verde longo (Sensor de Gás)
+const int ledVerde = 2;         // Fio azul claro conectado na porta 2
+const int ledVermelho = 3;      // Fio vermelho conectado na porta 3
+const int ledAmarelo = 5;       // Fio laranja/azul escuro conectado na porta 5
+const int pinoBuzzer = 6;       // Fio cinza/azul que vai para a porta 6
+
+// Limite
+const int limiteBaixo = 487;    // Abaixo disso: Verde ligado fixo. Acima disso: Amarelo pisca
+const int limiteAlto = 600;     // Acima disso: Vermelho pisca (Perigo)
 
 void setup() {
-  pinMode(pinoLED, OUTPUT);
+  //
+  pinMode(ledVerde, OUTPUT);
+  pinMode(ledAmarelo, OUTPUT);
+  pinMode(ledVermelho, OUTPUT);
   pinMode(pinoBuzzer, OUTPUT);
+  
+  // 
   pinMode(pinoSensor, INPUT);
   
   Serial.begin(9600);
-  Serial.println("Detector de Gas Ativo!");
+  Serial.println("Sistema de Monitoramento Ativo!");
 }
 
 void loop() {
   int valorLido = analogRead(pinoSensor);
   
-  ////////
-  Serial.print("Nivel lido: ");
+  Serial.print("Nivel de Fumaca: ");
   Serial.println(valorLido);
 
-  if (valorLido > limiteAlerta) {
-    // AÇÃO DE ALERTA
-    digitalWrite(pinoLED, HIGH);     // Liga o LED
-    tone(pinoBuzzer, 1000);          // Liga o som
-    delay(150);                      // Espera um pouco
+  // 
+  if (valorLido > limiteAlto) {
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledAmarelo, LOW);
     
-    digitalWrite(pinoLED, LOW);      // Pisca o LED
-    noTone(pinoBuzzer);              // Desliga o som
+    digitalWrite(ledVermelho, HIGH);
+    tone(pinoBuzzer, 1300); // Som agudo de perigo
     delay(150);
-  } else {
-    // TUDO SEGURO
-    digitalWrite(pinoLED, LOW);
+    
+    digitalWrite(ledVermelho, LOW);
     noTone(pinoBuzzer);
+    delay(150);
+  } 
+  //
+  else if (valorLido > limiteBaixo) {
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledVermelho, LOW);
+    
+    digitalWrite(ledAmarelo, HIGH);
+    tone(pinoBuzzer, 800); //
+    delay(300);
+    
+    digitalWrite(ledAmarelo, LOW);
+    noTone(pinoBuzzer);
+    delay(300);
+  } 
+  //
+  else {
+    digitalWrite(ledVerde, HIGH);
+    digitalWrite(ledAmarelo, LOW);
+    digitalWrite(ledVermelho, LOW);
+    noTone(pinoBuzzer); // Buzzer em silêncio
+    delay(100); 
   }
-
-  delay(50); 
 }
