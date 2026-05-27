@@ -1,14 +1,13 @@
-
-// Definição dos pinos :
-const int pinoSensor = A0;      // Fio verde longo (Sensor de Gás)
-const int ledVerde = 2;         // Fio azul claro conectado na porta 2
-const int ledVermelho = 3;      // Fio vermelho conectado na porta 3
-const int ledAmarelo = 5;       // Fio laranja/azul escuro conectado na porta 5
-const int pinoBuzzer = 6;       // Fio cinza/azul que vai para a porta 6
+// Definição dos pinos:
+const int pinoSensor = A0;      // Sensor de Gás
+const int ledVerde = 2;         // 
+const int ledVermelho = 3;      // 
+const int ledAmarelo = 5;       // 
+const int pinoBuzzer = 6;       // 
 
 // Limite
-const int limiteBaixo = 487;    // Abaixo disso: Verde ligado fixo. Acima disso: Amarelo pisca
-const int limiteAlto = 600;     // Acima disso: Vermelho pisca (Perigo)
+const int limiteBaixo = 487;    //
+const int limiteAlto = 600;     //
 
 void setup() {
   //
